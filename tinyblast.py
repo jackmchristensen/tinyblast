@@ -12,7 +12,7 @@ from ui.tinyblast_options import Ui_TinyblastOptions
 
 from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QFileDialog
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QCoreApplication, QSettings
 import shiboken6
 
 # Global variable to store the scriptJob ID
@@ -155,17 +155,20 @@ class Tinyblast(ompx.MPxCommand):
         self.codec = 'libx265'
         self.bitrate = '5m'
         self.pixel_format = 'yuv420p'
-        self.resolution = (cmds.getAttr("defaultResolution.width"), cmds.getAttr("defaultResolution.height"))
+        self.resolution = (1920, 1080)
+        # self.resolution = (cmds.getAttr("defaultResolution.width"), cmds.getAttr("defaultResolution.height"))
         self.percent = '100'
         self.path = ''
+        self.save = True
 
-    def apply_settings(self, format, codec, quality, resolution, scale, file_path):
+    def apply_settings(self, format, codec, quality, resolution, scale, file_path, save):
         self.format = format
         self.codec = self.get_codec(codec)
-        self.bitrate = f"{round(8 * (resolution[0] * resolution[1]) / (1920 * 1080) * (float(quality) / 100), 1)}m"
+        self.bitrate = f"{round(8 * (resolution[0] * resolution[1]) / (1920 * 1080) * (float(quality) / 100), 1)}M"
         self.resolution = resolution
         self.percent = int(scale * 100)
         self.path = file_path
+        self.save = save
 
     def get_codec(self, pretty_name):
         if pretty_name == 'HEVC (H.265)':
@@ -199,23 +202,19 @@ class Tinyblast(ompx.MPxCommand):
         return ompx.asMPxPtr(Tinyblast())
 
     def custom_playblast(self, *args, **kwargs):
-        print("Running tinyblast...")
-
         kwargs['format'] = 'avi'
         kwargs['percent'] = int(self.percent)
         kwargs['quality'] = 100
         kwargs['widthHeight'] = self.resolution
 
         result = original_playblast(*args, **kwargs)
-        print(f"{result}")
 
-        if result:
+        if result and self.save:
             self.blastIt(result)
 
     def blastIt(self, input_path):
         try:
             ffmpeg_path = os.path.join(get_plugin_directory(), 'ffmpeg.exe')
-            print(f"ffmpeg path: {ffmpeg_path}")
             if not os.path.exists(ffmpeg_path):
                 raise FileNotFoundError(f"FFmpeg binary not found at {ffmpeg_path}")
 
@@ -229,7 +228,6 @@ class Tinyblast(ompx.MPxCommand):
 
             # Define the full path for the converted output file
             output_file = self.path
-            print(f"Output path: {output_file}")
 
             # Run FFmpeg conversion
             subprocess.run([ffmpeg_path,
@@ -262,6 +260,10 @@ class TinyblastOptionsWindow(QMainWindow):
         self.ui = Ui_TinyblastOptions()
         self.ui.setupUi(self)
 
+        self.resize(1280, 720)
+
+        self.restore_settings()
+
         self.ui.formattingComboBox.currentIndexChanged.connect(self.update_format)
 
         self.ui.tinyblastButton.clicked.connect(self.tinyblast)
@@ -281,6 +283,17 @@ class TinyblastOptionsWindow(QMainWindow):
 
         self.ui.saveToFileCheckBox.toggled.connect(self.save_to_file_toggle)
         self.ui.browseButton.clicked.connect(self.browse_files)
+
+    def restore_settings(self):
+        settings = QSettings("Jack Christensen", "Tinyblast")
+
+        geometry = settings.value("windowGeometry")
+        if geometry:
+            self.restoreGeometry(geometry)
+
+    def closeEvent(self, event):
+        settings = QSettings("Jack Christensen", "Tinyblast")
+        settings.setValue("windowGeometry", self.saveGeometry())
 
     def update_format(self, index):
         self.ui.encodingComboBox.clear()
@@ -362,7 +375,8 @@ class TinyblastOptionsWindow(QMainWindow):
                 self.ui.qualitySpinBox.value(),  # Quality as a percentage
                 (self.ui.widthSpinBox.value(), self.ui.heightSpinBox.value()),  # Resolution
                 self.ui.scaleSpinBox.value(),  # Scale
-                self.ui.filePathTextBox.text()  # File path
+                self.ui.filePathTextBox.text(),  # File path
+                self.ui.saveToFileCheckBox.isChecked()
             )
 
     def quit_window(self):
@@ -375,15 +389,11 @@ class TinyblastOptionsWindow(QMainWindow):
 
     def update_display_size(self, index):
         if index == 0:
-            self.ui.widthSpinBox.setEnabled(False)
-            self.ui.heightSpinBox.setEnabled(False)
+            self.ui.widthSpinBox.setEnabled(True)
+            self.ui.heightSpinBox.setEnabled(True)
         if index == 1:
             self.ui.widthSpinBox.setEnabled(False)
             self.ui.heightSpinBox.setEnabled(False)
-        if index == 2:
-            self.ui.widthSpinBox.setEnabled(True)
-            self.ui.heightSpinBox.setEnabled(True)
-
 
     def update_scale_slider(self, value):
         self.ui.scaleSpinBox.setValue(float(value/1000.0))
@@ -427,7 +437,7 @@ def show_my_window():
     tb_window = TinyblastOptionsWindow()
     tb_window.show()
 
-class MyPluginCommand(ompx.MPxCommand):
+class OpenTinyblastOptions(ompx.MPxCommand):
     def __init__(self):
         ompx.MPxCommand.__init__(self)
 
@@ -435,15 +445,15 @@ class MyPluginCommand(ompx.MPxCommand):
         show_my_window()
 
 def cmdCreator():
-    return ompx.asMPxPtr(MyPluginCommand())
+    return ompx.asMPxPtr(OpenTinyblastOptions())
 
 def initializePlugin(mobject):
     global tinyblast_instance
     tinyblast_instance = Tinyblast()
     try:
-        mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "1.0.0", "Any")
+        mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "2.0.0", "Any")
         mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
-        mplugin.registerCommand("myPluginCommand", cmdCreator)
+        mplugin.registerCommand("openTinyblastOptions", cmdCreator)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
         setup_script_job()
         cmds.playblast = tinyblast_instance.custom_playblast
@@ -456,7 +466,7 @@ def uninitializePlugin(mobject):
         mplugin = ompx.MFnPlugin(mobject)
         tb_window.close()
         mplugin.deregisterCommand("tinyblast")
-        mplugin.deregisterCommand("myPluginCommand")
+        mplugin.deregisterCommand("openTinyblastOptions")
         om.MGlobal.displayInfo("Tinyblast plugin unloaded.")
     except Exception as e:
         om.MGlobal.displayError(f"Failed to uninitialize plugin: {str(e)}")

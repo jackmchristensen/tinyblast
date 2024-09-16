@@ -21,7 +21,6 @@
        <font>
         <family>Dubai</family>
         <pointsize>28</pointsize>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -29,20 +28,20 @@
        <string>Tinyblast</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QScrollArea" name="scrollArea">
       <property name="frameShape">
-       <enum>QFrame::Box</enum>
+       <enum>QFrame::Shape::Box</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
+       <enum>QFrame::Shadow::Sunken</enum>
       </property>
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -53,7 +52,7 @@
          <x>0</x>
          <y>0</y>
          <width>533</width>
-         <height>295</height>
+         <height>296</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -65,7 +64,7 @@
              <string>File Path</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -78,7 +77,7 @@
              <number>50</number>
             </property>
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -92,7 +91,7 @@
           <item row="8" column="0" colspan="4">
            <widget class="Line" name="line_01">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -102,7 +101,7 @@
              <string>Encoding</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -122,17 +121,12 @@
             </property>
             <item>
              <property name="text">
-              <string>From Window</string>
+              <string>Custom</string>
              </property>
             </item>
             <item>
              <property name="text">
               <string>From Render Settings</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Custom</string>
              </property>
             </item>
            </widget>
@@ -143,7 +137,7 @@
              <string>Display Size</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -172,7 +166,7 @@
              <number>4</number>
             </property>
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -182,7 +176,7 @@
              <string>Frame Padding</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -198,7 +192,7 @@
              <number>1000</number>
             </property>
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -208,7 +202,7 @@
              <string>Save to File</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -218,7 +212,7 @@
              <string>Scale</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -240,14 +234,14 @@
              <string>Format</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item row="3" column="0" colspan="4">
            <widget class="Line" name="line_00">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -257,17 +251,17 @@
              <string>Quality</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item row="6" column="1">
            <widget class="QDoubleSpinBox" name="scaleSpinBox">
             <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
             </property>
             <property name="correctionMode">
-             <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+             <enum>QAbstractSpinBox::CorrectionMode::CorrectToNearestValue</enum>
             </property>
             <property name="maximum">
              <double>1.000000000000000</double>
@@ -280,10 +274,10 @@
           <item row="2" column="1">
            <widget class="QSpinBox" name="qualitySpinBox">
             <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
             </property>
             <property name="correctionMode">
-             <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+             <enum>QAbstractSpinBox::CorrectionMode::CorrectToNearestValue</enum>
             </property>
             <property name="minimum">
              <number>0</number>
@@ -299,10 +293,10 @@
           <item row="7" column="1">
            <widget class="QSpinBox" name="framePaddingSpinBox">
             <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
             </property>
             <property name="correctionMode">
-             <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+             <enum>QAbstractSpinBox::CorrectionMode::CorrectToNearestValue</enum>
             </property>
             <property name="maximum">
              <number>10</number>
@@ -315,7 +309,7 @@
           <item row="5" column="1">
            <widget class="QSpinBox" name="widthSpinBox">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="maximumSize">
              <size>
@@ -324,10 +318,10 @@
              </size>
             </property>
             <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
             </property>
             <property name="correctionMode">
-             <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+             <enum>QAbstractSpinBox::CorrectionMode::CorrectToNearestValue</enum>
             </property>
             <property name="maximum">
              <number>999999999</number>
@@ -340,7 +334,7 @@
           <item row="5" column="2">
            <widget class="QSpinBox" name="heightSpinBox">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="maximumSize">
              <size>
@@ -349,7 +343,7 @@
              </size>
             </property>
             <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
             </property>
             <property name="maximum">
              <number>999999999</number>
@@ -517,7 +511,7 @@
      <x>0</x>
      <y>0</y>
      <width>551</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -538,17 +532,17 @@
   </widget>
   <action name="actionSave_Settings">
    <property name="text">
-    <string>Save Settings</string>
+    <string>(TODO) Save Settings</string>
    </property>
   </action>
   <action name="actionReset_Settings">
    <property name="text">
-    <string>Reset Settings</string>
+    <string>(TODO) Reset Settings</string>
    </property>
   </action>
   <action name="actionHelp_on_Tinyblas_Options">
    <property name="text">
-    <string>Help on Tinyblas Options</string>
+    <string>(TODO) Help on Tinyblast Options</string>
    </property>
   </action>
  </widget>

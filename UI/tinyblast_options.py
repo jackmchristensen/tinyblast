@@ -45,26 +45,26 @@ class Ui_TinyblastOptions(object):
         font.setPointSize(28)
         font.setBold(True)
         self.Title.setFont(font)
-        self.Title.setAlignment(Qt.AlignCenter)
+        self.Title.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.Title)
 
         self.scrollArea = QScrollArea(self.centralwidget)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setFrameShape(QFrame.Box)
-        self.scrollArea.setFrameShadow(QFrame.Sunken)
-        self.scrollArea.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
+        self.scrollArea.setFrameShape(QFrame.Shape.Box)
+        self.scrollArea.setFrameShadow(QFrame.Shadow.Sunken)
+        self.scrollArea.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 533, 295))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 533, 296))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.filePathLabel = QLabel(self.scrollAreaWidgetContents)
         self.filePathLabel.setObjectName(u"filePathLabel")
-        self.filePathLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.filePathLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.filePathLabel, 10, 0, 1, 1)
 
@@ -72,7 +72,7 @@ class Ui_TinyblastOptions(object):
         self.qualitySlider.setObjectName(u"qualitySlider")
         self.qualitySlider.setMaximum(100)
         self.qualitySlider.setSliderPosition(50)
-        self.qualitySlider.setOrientation(Qt.Horizontal)
+        self.qualitySlider.setOrientation(Qt.Orientation.Horizontal)
 
         self.gridLayout.addWidget(self.qualitySlider, 2, 2, 1, 2)
 
@@ -90,12 +90,11 @@ class Ui_TinyblastOptions(object):
 
         self.encodingLabel = QLabel(self.scrollAreaWidgetContents)
         self.encodingLabel.setObjectName(u"encodingLabel")
-        self.encodingLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.encodingLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.encodingLabel, 1, 0, 1, 1)
 
         self.displaySizeComboBox = QComboBox(self.scrollAreaWidgetContents)
-        self.displaySizeComboBox.addItem("")
         self.displaySizeComboBox.addItem("")
         self.displaySizeComboBox.addItem("")
         self.displaySizeComboBox.setObjectName(u"displaySizeComboBox")
@@ -106,7 +105,7 @@ class Ui_TinyblastOptions(object):
 
         self.displaySizeLabel = QLabel(self.scrollAreaWidgetContents)
         self.displaySizeLabel.setObjectName(u"displaySizeLabel")
-        self.displaySizeLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.displaySizeLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.displaySizeLabel, 4, 0, 1, 1)
 
@@ -126,13 +125,13 @@ class Ui_TinyblastOptions(object):
         self.framePaddingSlider.setObjectName(u"framePaddingSlider")
         self.framePaddingSlider.setMaximum(10)
         self.framePaddingSlider.setSliderPosition(4)
-        self.framePaddingSlider.setOrientation(Qt.Horizontal)
+        self.framePaddingSlider.setOrientation(Qt.Orientation.Horizontal)
 
         self.gridLayout.addWidget(self.framePaddingSlider, 7, 2, 1, 2)
 
         self.framePaddingLabel = QLabel(self.scrollAreaWidgetContents)
         self.framePaddingLabel.setObjectName(u"framePaddingLabel")
-        self.framePaddingLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.framePaddingLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.framePaddingLabel, 7, 0, 1, 1)
 
@@ -141,19 +140,19 @@ class Ui_TinyblastOptions(object):
         self.scaleSlider.setMaximum(1000)
         self.scaleSlider.setValue(1000)
         self.scaleSlider.setSliderPosition(1000)
-        self.scaleSlider.setOrientation(Qt.Horizontal)
+        self.scaleSlider.setOrientation(Qt.Orientation.Horizontal)
 
         self.gridLayout.addWidget(self.scaleSlider, 6, 2, 1, 2)
 
         self.saveToFileLabel = QLabel(self.scrollAreaWidgetContents)
         self.saveToFileLabel.setObjectName(u"saveToFileLabel")
-        self.saveToFileLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.saveToFileLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.saveToFileLabel, 9, 0, 1, 1)
 
         self.scaleLabel = QLabel(self.scrollAreaWidgetContents)
         self.scaleLabel.setObjectName(u"scaleLabel")
-        self.scaleLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.scaleLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.scaleLabel, 6, 0, 1, 1)
 
@@ -161,7 +160,7 @@ class Ui_TinyblastOptions(object):
         self.formattingLabel.setObjectName(u"formattingLabel")
         self.formattingLabel.setMinimumSize(QSize(150, 0))
         self.formattingLabel.setMaximumSize(QSize(150, 16777215))
-        self.formattingLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.formattingLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.formattingLabel, 0, 0, 1, 1)
 
@@ -174,14 +173,14 @@ class Ui_TinyblastOptions(object):
 
         self.qualityLabel = QLabel(self.scrollAreaWidgetContents)
         self.qualityLabel.setObjectName(u"qualityLabel")
-        self.qualityLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.qualityLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.qualityLabel, 2, 0, 1, 1)
 
         self.scaleSpinBox = QDoubleSpinBox(self.scrollAreaWidgetContents)
         self.scaleSpinBox.setObjectName(u"scaleSpinBox")
-        self.scaleSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.scaleSpinBox.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
+        self.scaleSpinBox.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.scaleSpinBox.setCorrectionMode(QAbstractSpinBox.CorrectionMode.CorrectToNearestValue)
         self.scaleSpinBox.setMaximum(1.000000000000000)
         self.scaleSpinBox.setValue(1.000000000000000)
 
@@ -189,8 +188,8 @@ class Ui_TinyblastOptions(object):
 
         self.qualitySpinBox = QSpinBox(self.scrollAreaWidgetContents)
         self.qualitySpinBox.setObjectName(u"qualitySpinBox")
-        self.qualitySpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.qualitySpinBox.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
+        self.qualitySpinBox.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.qualitySpinBox.setCorrectionMode(QAbstractSpinBox.CorrectionMode.CorrectToNearestValue)
         self.qualitySpinBox.setMinimum(0)
         self.qualitySpinBox.setMaximum(100)
         self.qualitySpinBox.setValue(50)
@@ -199,8 +198,8 @@ class Ui_TinyblastOptions(object):
 
         self.framePaddingSpinBox = QSpinBox(self.scrollAreaWidgetContents)
         self.framePaddingSpinBox.setObjectName(u"framePaddingSpinBox")
-        self.framePaddingSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.framePaddingSpinBox.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
+        self.framePaddingSpinBox.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.framePaddingSpinBox.setCorrectionMode(QAbstractSpinBox.CorrectionMode.CorrectToNearestValue)
         self.framePaddingSpinBox.setMaximum(10)
         self.framePaddingSpinBox.setValue(4)
 
@@ -208,10 +207,10 @@ class Ui_TinyblastOptions(object):
 
         self.widthSpinBox = QSpinBox(self.scrollAreaWidgetContents)
         self.widthSpinBox.setObjectName(u"widthSpinBox")
-        self.widthSpinBox.setEnabled(False)
+        self.widthSpinBox.setEnabled(True)
         self.widthSpinBox.setMaximumSize(QSize(80, 16777215))
-        self.widthSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.widthSpinBox.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
+        self.widthSpinBox.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.widthSpinBox.setCorrectionMode(QAbstractSpinBox.CorrectionMode.CorrectToNearestValue)
         self.widthSpinBox.setMaximum(999999999)
         self.widthSpinBox.setValue(1920)
 
@@ -219,9 +218,9 @@ class Ui_TinyblastOptions(object):
 
         self.heightSpinBox = QSpinBox(self.scrollAreaWidgetContents)
         self.heightSpinBox.setObjectName(u"heightSpinBox")
-        self.heightSpinBox.setEnabled(False)
+        self.heightSpinBox.setEnabled(True)
         self.heightSpinBox.setMaximumSize(QSize(80, 16777215))
-        self.heightSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.heightSpinBox.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
         self.heightSpinBox.setMaximum(999999999)
         self.heightSpinBox.setValue(1080)
 
@@ -289,7 +288,7 @@ class Ui_TinyblastOptions(object):
         TinyblastOptions.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(TinyblastOptions)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 551, 21))
+        self.menubar.setGeometry(QRect(0, 0, 551, 20))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
@@ -309,16 +308,15 @@ class Ui_TinyblastOptions(object):
 
     def retranslateUi(self, TinyblastOptions):
         TinyblastOptions.setWindowTitle(QCoreApplication.translate("TinyblastOptions", u"Tinyblast Options", None))
-        self.actionSave_Settings.setText(QCoreApplication.translate("TinyblastOptions", u"Save Settings", None))
-        self.actionReset_Settings.setText(QCoreApplication.translate("TinyblastOptions", u"Reset Settings", None))
-        self.actionHelp_on_Tinyblas_Options.setText(QCoreApplication.translate("TinyblastOptions", u"Help on Tinyblas Options", None))
+        self.actionSave_Settings.setText(QCoreApplication.translate("TinyblastOptions", u"(TODO) Save Settings", None))
+        self.actionReset_Settings.setText(QCoreApplication.translate("TinyblastOptions", u"(TODO) Reset Settings", None))
+        self.actionHelp_on_Tinyblas_Options.setText(QCoreApplication.translate("TinyblastOptions", u"(TODO) Help on Tinyblast Options", None))
         self.Title.setText(QCoreApplication.translate("TinyblastOptions", u"Tinyblast", None))
         self.filePathLabel.setText(QCoreApplication.translate("TinyblastOptions", u"File Path", None))
         self.blankLabel.setText("")
         self.encodingLabel.setText(QCoreApplication.translate("TinyblastOptions", u"Encoding", None))
-        self.displaySizeComboBox.setItemText(0, QCoreApplication.translate("TinyblastOptions", u"From Window", None))
+        self.displaySizeComboBox.setItemText(0, QCoreApplication.translate("TinyblastOptions", u"Custom", None))
         self.displaySizeComboBox.setItemText(1, QCoreApplication.translate("TinyblastOptions", u"From Render Settings", None))
-        self.displaySizeComboBox.setItemText(2, QCoreApplication.translate("TinyblastOptions", u"Custom", None))
 
         self.displaySizeLabel.setText(QCoreApplication.translate("TinyblastOptions", u"Display Size", None))
         self.saveToFileCheckBox.setText("")
