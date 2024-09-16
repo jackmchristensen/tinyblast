@@ -1,9 +1,15 @@
+import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaMPx as ompx
-import maya.cmds as cmds
 import os
 import subprocess
 import sys
+
+from UI.tinyblast_options import Ui_TinyblastOptions
+from PySide6 import QtCore
+from PySide6.QtWidgets import QMainWindow
+
+import shiboken6
 
 # Global variable to store the scriptJob ID
 playblast_job_id = None
@@ -149,10 +155,49 @@ class Tinyblast(ompx.MPxCommand):
     def cmdCreator():
         return ompx.asMPxPtr(Tinyblast())
 
+def get_maya_window():
+    import maya.OpenMayaUI as omui
+    from PySide6 import QtWidgets
+    ptr = omui.MQtUtil.mainWindow()
+    if ptr is not None:
+        return shiboken6.wrapInstance(int(ptr), QtWidgets.QWidget)
+    else:
+        return None
+
+
+class MyDialog(QMainWindow):
+    def __init__(self, parent=None):
+        super(MyDialog, self).__init__(parent or get_maya_window())
+        self.ui = Ui_TinyblastOptions()
+        self.ui.setupUi(self)
+        # Additional setup if needed
+
+
+def show_my_window():
+    global my_dialog
+    try:
+        my_dialog.close()
+        my_dialog.deleteLater()
+    except:
+        pass
+    my_dialog = MyDialog()
+    my_dialog.show()
+
+class MyPluginCommand(ompx.MPxCommand):
+    def __init__(self):
+        ompx.MPxCommand.__init__(self)
+
+    def doIt(self, args):
+        show_my_window()
+
+def cmdCreator():
+    return ompx.asMPxPtr(MyPluginCommand())
+
 def initializePlugin(mobject):
     try:
         mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "1.0.0", "Any")
         mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
+        mplugin.registerCommand("myPluginCommand", cmdCreator)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
         setup_script_job()
         cmds.playblast = custom_playblast
@@ -164,6 +209,7 @@ def uninitializePlugin(mobject):
     try:
         mplugin = ompx.MFnPlugin(mobject)
         mplugin.deregisterCommand("tinyblast")
+        mplugin.deregisterCommand("myPluginCommand")
         om.MGlobal.displayInfo("Tinyblast plugin unloaded.")
     except Exception as e:
         om.MGlobal.displayError(f"Failed to uninitialize plugin: {str(e)}")
