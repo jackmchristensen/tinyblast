@@ -71,6 +71,9 @@
           </item>
           <item row="2" column="2" colspan="2">
            <widget class="QSlider" name="qualitySlider">
+            <property name="maximum">
+             <number>100</number>
+            </property>
             <property name="sliderPosition">
              <number>50</number>
             </property>
@@ -93,52 +96,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="encodingComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>80</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>H.264</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>H.265</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>VP9</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ProRes</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>AV1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>MPEG-4</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="encodingLabel">
             <property name="text">
@@ -147,59 +104,6 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="formattingComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>80</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="statusTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="accessibleName">
-             <string/>
-            </property>
-            <property name="accessibleDescription">
-             <string/>
-            </property>
-            <item>
-             <property name="text">
-              <string>MP4</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>MKV</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>MOV</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>AVI</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>WebM</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="4" column="1" colspan="2">
@@ -358,7 +262,7 @@
            </widget>
           </item>
           <item row="6" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox">
+           <widget class="QDoubleSpinBox" name="scaleSpinBox">
             <property name="buttonSymbols">
              <enum>QAbstractSpinBox::NoButtons</enum>
             </property>
@@ -374,7 +278,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="qualitySpinBox">
             <property name="buttonSymbols">
              <enum>QAbstractSpinBox::NoButtons</enum>
             </property>
@@ -393,7 +297,7 @@
            </widget>
           </item>
           <item row="7" column="1">
-           <widget class="QSpinBox" name="spinBox_2">
+           <widget class="QSpinBox" name="framePaddingSpinBox">
             <property name="buttonSymbols">
              <enum>QAbstractSpinBox::NoButtons</enum>
             </property>
@@ -409,7 +313,7 @@
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QSpinBox" name="spinBox_3">
+           <widget class="QSpinBox" name="widthSpinBox">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -434,7 +338,7 @@
            </widget>
           </item>
           <item row="5" column="2">
-           <widget class="QSpinBox" name="spinBox_4">
+           <widget class="QSpinBox" name="heightSpinBox">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -460,6 +364,100 @@
             <property name="text">
              <string>Browse...</string>
             </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QComboBox" name="encodingComboBox">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>HEVC (H.265)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>H.264</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AV1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>MPEG-4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>VP9</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QComboBox" name="formattingComboBox">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string/>
+            </property>
+            <property name="accessibleName">
+             <string/>
+            </property>
+            <property name="accessibleDescription">
+             <string/>
+            </property>
+            <item>
+             <property name="text">
+              <string>MP4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>MKV</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>MOV</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AVI</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>WebM</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>

@@ -1,14 +1,18 @@
 import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaMPx as ompx
+
 import os
 import subprocess
 import sys
+import tkinter as tk
+from tkinter import filedialog
 
-from UI.tinyblast_options import Ui_TinyblastOptions
+from ui.tinyblast_options import Ui_TinyblastOptions
+
 from PySide6 import QtCore
-from PySide6.QtWidgets import QMainWindow
-
+from PySide6.QtWidgets import QMainWindow, QFileDialog
+from PySide6.QtCore import QCoreApplication
 import shiboken6
 
 # Global variable to store the scriptJob ID
@@ -22,7 +26,7 @@ def get_plugin_directory():
     return os.path.dirname(plugin_path)
 
 def custom_playblast(*args, **kwargs):
-    print("Running playblast...")
+    print("Running tinyblast...")
 
     kwargs['format'] = 'avi'
     kwargs['percent'] = 100
@@ -148,7 +152,7 @@ class Tinyblast(ompx.MPxCommand):
         ompx.MPxCommand.__init__(self)
 
     def doIt(selfself, args):
-        print("Executing custom playblast command.")
+        print("Tinyblasting...")
         cmds.playblast()
 
     @staticmethod
@@ -165,23 +169,167 @@ def get_maya_window():
         return None
 
 
-class MyDialog(QMainWindow):
+class TinyblastOptionsWindow(QMainWindow):
     def __init__(self, parent=None):
-        super(MyDialog, self).__init__(parent or get_maya_window())
+        super(TinyblastOptionsWindow, self).__init__(parent or get_maya_window())
         self.ui = Ui_TinyblastOptions()
         self.ui.setupUi(self)
-        # Additional setup if needed
 
+        self.ui.formattingComboBox.currentIndexChanged.connect(self.update_format)
+
+        self.ui.tinyblastButton.clicked.connect(self.tinyblast)
+        self.ui.applyButton.clicked.connect(self.apply_settings)
+        self.ui.quitButton.clicked.connect(self.quit_window)
+
+        self.ui.qualitySlider.valueChanged.connect(self.update_quality_slider)
+        self.ui.qualitySpinBox.valueChanged.connect(self.update_quality_spinbox)
+
+        self.ui.displaySizeComboBox.currentIndexChanged.connect(self.update_display_size)
+
+        self.ui.scaleSlider.valueChanged.connect(self.update_scale_slider)
+        self.ui.scaleSpinBox.valueChanged.connect(self.update_scale_spinbox)
+
+        self.ui.framePaddingSlider.valueChanged.connect(self.update_frame_padding_slider)
+        self.ui.framePaddingSpinBox.valueChanged.connect(self.update_frame_padding_spinbox)
+
+        self.ui.saveToFileCheckBox.toggled.connect(self.save_to_file_toggle)
+        self.ui.browseButton.clicked.connect(self.browse_files)
+
+    def update_format(self, index):
+        self.ui.encodingComboBox.clear()
+        # MP4
+        if index == 0:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"AV1", None),
+                QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP9", None)
+            ])
+
+            if self.ui.filePathTextBox.text():
+                split_path = self.ui.filePathTextBox.text().rsplit('.', 1)
+                self.ui.filePathTextBox.setText(f"{split_path[0]}.mp4")
+
+        # MKV
+        if index == 1:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"AV1", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP9", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP8", None),
+                QCoreApplication.translate("TinyblastOptions", u"Theora", None)
+            ])
+
+            if self.ui.filePathTextBox.text():
+                split_path = self.ui.filePathTextBox.text().rsplit('.', 1)
+                self.ui.filePathTextBox.setText(f"{split_path[0]}.mkv")
+        # MOV
+        if index == 2:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"Apple ProRes", None),
+                QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None)
+            ])
+
+            if self.ui.filePathTextBox.text():
+                split_path = self.ui.filePathTextBox.text().rsplit('.', 1)
+                self.ui.filePathTextBox.setText(f"{split_path[0]}.mov")
+        # AVI
+        if index == 3:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None),
+                QCoreApplication.translate("TinyblastOptions", u"DivX", None),
+                QCoreApplication.translate("TinyblastOptions", u"Xvid", None),
+                QCoreApplication.translate("TinyblastOptions", u"Motion JPEG", None),
+            ])
+
+            if self.ui.filePathTextBox.text():
+                split_path = self.ui.filePathTextBox.text().rsplit('.', 1)
+                self.ui.filePathTextBox.setText(f"{split_path[0]}.avi")
+        # WEBM
+        if index == 4:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"AV1", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP9", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP8", None)
+            ])
+
+            if self.ui.filePathTextBox.text():
+                split_path = self.ui.filePathTextBox.text().rsplit('.', 1)
+                self.ui.filePathTextBox.setText(f"{split_path[0]}.webm")
+
+    def tinyblast(self):
+        print("Tinyblasting...")
+        cmds.playblast()
+
+    def apply_settings(self):
+        print("TODO")
+
+    def quit_window(self):
+        tb_window.close()
+
+    def update_quality_slider(self, value):
+        self.ui.qualitySpinBox.setValue(value)
+    def update_quality_spinbox(self, value):
+        self.ui.qualitySlider.setValue(value)
+
+    def update_display_size(self, index):
+        if index == 0:
+            self.ui.widthSpinBox.setEnabled(False)
+            self.ui.heightSpinBox.setEnabled(False)
+        if index == 1:
+            self.ui.widthSpinBox.setEnabled(False)
+            self.ui.heightSpinBox.setEnabled(False)
+        if index == 2:
+            self.ui.widthSpinBox.setEnabled(True)
+            self.ui.heightSpinBox.setEnabled(True)
+
+
+    def update_scale_slider(self, value):
+        self.ui.scaleSpinBox.setValue(float(value/1000.0))
+    def update_scale_spinbox(self, value):
+        self.ui.scaleSlider.setValue(int(value*1000))
+
+    def update_frame_padding_slider(self, value):
+        self.ui.framePaddingSpinBox.setValue(value)
+    def update_frame_padding_spinbox(self, value):
+        self.ui.framePaddingSlider.setValue(value)
+
+    def save_to_file_toggle(self):
+        if self.ui.saveToFileCheckBox.isChecked():
+            self.ui.browseButton.setEnabled(True)
+            self.ui.filePathTextBox.setEnabled(True)
+        else:
+            self.ui.browseButton.setEnabled(False)
+            self.ui.filePathTextBox.setEnabled(False)
+
+    def browse_files(self):
+        path = self.choose_save_path()
+        self.ui.filePathTextBox.setText(f"{path}")
+
+    def choose_save_path(self):
+        current_container = str(self.ui.formattingComboBox.currentText()).lower()
+        save_path, _ = QFileDialog.getSaveFileName(
+            None,
+            "Choose Save Location",
+            "",
+            f"Video (*.{current_container});;All Files (*)"
+        )
+        return save_path
 
 def show_my_window():
-    global my_dialog
+    global tb_window
     try:
-        my_dialog.close()
-        my_dialog.deleteLater()
+        tb_window.close()
+        tb_window.deleteLater()
     except:
         pass
-    my_dialog = MyDialog()
-    my_dialog.show()
+    tb_window = TinyblastOptionsWindow()
+    tb_window.show()
 
 class MyPluginCommand(ompx.MPxCommand):
     def __init__(self):
@@ -208,6 +356,7 @@ def initializePlugin(mobject):
 def uninitializePlugin(mobject):
     try:
         mplugin = ompx.MFnPlugin(mobject)
+        tb_window.close()
         mplugin.deregisterCommand("tinyblast")
         mplugin.deregisterCommand("myPluginCommand")
         om.MGlobal.displayInfo("Tinyblast plugin unloaded.")
