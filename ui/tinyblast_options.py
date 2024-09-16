@@ -111,13 +111,14 @@ class Ui_TinyblastOptions(object):
 
         self.saveToFileCheckBox = QCheckBox(self.scrollAreaWidgetContents)
         self.saveToFileCheckBox.setObjectName(u"saveToFileCheckBox")
-        self.saveToFileCheckBox.setChecked(True)
+        self.saveToFileCheckBox.setChecked(False)
         self.saveToFileCheckBox.setTristate(False)
 
         self.gridLayout.addWidget(self.saveToFileCheckBox, 9, 1, 1, 1)
 
         self.filePathTextBox = QLineEdit(self.scrollAreaWidgetContents)
         self.filePathTextBox.setObjectName(u"filePathTextBox")
+        self.filePathTextBox.setEnabled(False)
 
         self.gridLayout.addWidget(self.filePathTextBox, 10, 1, 1, 3)
 
@@ -228,6 +229,7 @@ class Ui_TinyblastOptions(object):
 
         self.browseButton = QPushButton(self.scrollAreaWidgetContents)
         self.browseButton.setObjectName(u"browseButton")
+        self.browseButton.setEnabled(False)
 
         self.gridLayout.addWidget(self.browseButton, 11, 1, 1, 2)
 

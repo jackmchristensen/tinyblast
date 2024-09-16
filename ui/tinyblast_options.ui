@@ -147,7 +147,7 @@
              <string/>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="tristate">
              <bool>false</bool>
@@ -155,7 +155,11 @@
            </widget>
           </item>
           <item row="10" column="1" colspan="3">
-           <widget class="QLineEdit" name="filePathTextBox"/>
+           <widget class="QLineEdit" name="filePathTextBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item row="7" column="2" colspan="2">
            <widget class="QSlider" name="framePaddingSlider">
@@ -355,6 +359,9 @@
           </item>
           <item row="11" column="1" colspan="2">
            <widget class="QPushButton" name="browseButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Browse...</string>
             </property>
