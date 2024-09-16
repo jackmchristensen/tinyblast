@@ -18,6 +18,7 @@ import shiboken6
 # Global variable to store the scriptJob ID
 playblast_job_id = None
 original_playblast = cmds.playblast
+tinyblast_instance = None
 
 def get_plugin_directory():
     # Get the path of the currently loaded plugin
@@ -25,49 +26,49 @@ def get_plugin_directory():
     plugin_path = cmds.pluginInfo(plugin_name, query=True, path=True)
     return os.path.dirname(plugin_path)
 
-def custom_playblast(*args, **kwargs):
-    print("Running tinyblast...")
-
-    kwargs['format'] = 'avi'
-    kwargs['percent'] = 100
-    kwargs['quality'] = 100
-    kwargs['widthHeight'] = (1920, 1080)
-
-    result = original_playblast(*args, **kwargs)
-    print(f"{result}")
-
-    if result:
-        try:
-            ffmpeg_path = os.path.join(get_plugin_directory(), 'ffmpeg.exe')
-            print(f"ffmpeg path: {ffmpeg_path}")
-            if not os.path.exists(ffmpeg_path):
-                raise FileNotFoundError(f"FFmpeg binary not found at {ffmpeg_path}")
-
-            input_file = result  # The file output by playblast
-            #output_directory = os.path.dirname(result)  # Get the directory path
-            output_directory = os.path.dirname(cmds.file(query=True, sceneName=True))
-            input_filename = os.path.basename(result)  # Get the filename with extension
-
-            # Change the extension to .mp4
-            output_filename = os.path.splitext(input_filename)[0] + ".mp4"
-
-            # Define the full path for the converted output file
-            output_file = os.path.join(output_directory, output_filename)
-
-            # Run FFmpeg conversion
-            subprocess.run([ffmpeg_path,
-                            '-i', input_file,
-                            '-vcodec', 'libx264',
-                            '-pix_fmt', 'yuv420p',
-                            '-strict', 'experimental',
-                            '-b:v', '1m',
-                            output_file,
-                            '-y'], check=True, shell=True)
-            print(f"Video conversion to {output_file} successful!")
-            # os.remove(input_file) # Running into permission issues trying to delete from AppData
-            # print(f"Original playblast deleted: {input_file}")
-        except subprocess.CalledProcessError as e:
-            print(f"Error during FFmpeg conversion: {e}")
+# def custom_playblast(*args, **kwargs):
+#     print("Running tinyblast...")
+#
+#     kwargs['format'] = 'avi'
+#     kwargs['percent'] = 100
+#     kwargs['quality'] = 100
+#     kwargs['widthHeight'] = (1920, 1080)
+#
+#     result = original_playblast(*args, **kwargs)
+#     print(f"{result}")
+#
+#     if result:
+#         try:
+#             ffmpeg_path = os.path.join(get_plugin_directory(), 'ffmpeg.exe')
+#             print(f"ffmpeg path: {ffmpeg_path}")
+#             if not os.path.exists(ffmpeg_path):
+#                 raise FileNotFoundError(f"FFmpeg binary not found at {ffmpeg_path}")
+#
+#             input_file = result  # The file output by playblast
+#             #output_directory = os.path.dirname(result)  # Get the directory path
+#             output_directory = os.path.dirname(cmds.file(query=True, sceneName=True))
+#             input_filename = os.path.basename(result)  # Get the filename with extension
+#
+#             # Change the extension to .mp4
+#             output_filename = os.path.splitext(input_filename)[0] + ".mp4"
+#
+#             # Define the full path for the converted output file
+#             output_file = os.path.join(output_directory, output_filename)
+#
+#             # Run FFmpeg conversion
+#             subprocess.run([ffmpeg_path,
+#                             '-i', input_file,
+#                             '-vcodec', 'libx264',
+#                             '-pix_fmt', 'yuv420p',
+#                             '-strict', 'experimental',
+#                             '-b:v', '1m',
+#                             output_file,
+#                             '-y'], check=True, shell=True)
+#             print(f"Video conversion to {output_file} successful!")
+#             # os.remove(input_file) # Running into permission issues trying to delete from AppData
+#             # print(f"Original playblast deleted: {input_file}")
+#         except subprocess.CalledProcessError as e:
+#             print(f"Error during FFmpeg conversion: {e}")
 
 class WindowWatcher:
     """ A class to watch for a particular window in Maya """
@@ -150,6 +151,44 @@ def setup_script_job():
 class Tinyblast(ompx.MPxCommand):
     def __init__(self):
         ompx.MPxCommand.__init__(self)
+        self.format = 'mp4'
+        self.codec = 'libx265'
+        self.bitrate = '5m'
+        self.pixel_format = 'yuv420p'
+        self.resolution = (cmds.getAttr("defaultResolution.width"), cmds.getAttr("defaultResolution.height"))
+        self.percent = '100'
+        self.path = ''
+
+    def apply_settings(self, format, codec, quality, resolution, scale, file_path):
+        self.format = format
+        self.codec = self.get_codec(codec)
+        self.bitrate = f"{round(8 * (resolution[0] * resolution[1]) / (1920 * 1080) * (float(quality) / 100), 1)}m"
+        self.resolution = resolution
+        self.percent = int(scale * 100)
+        self.path = file_path
+
+    def get_codec(self, pretty_name):
+        if pretty_name == 'HEVC (H.265)':
+            return 'libx265'
+        if pretty_name == 'H.264':
+            return 'libx264'
+        if pretty_name == 'AV1':
+            return 'libaom-av1'
+        if pretty_name == 'MPEG-4':
+            return 'mpeg4'
+        if pretty_name == 'P8':
+            return 'libvpx'
+        if pretty_name == 'VP9':
+            return 'libvpx-vp9'
+        if pretty_name == 'Theora':
+            return 'libtheora'
+        if pretty_name == 'DNxHD':
+            return 'dnxhd'
+        if pretty_name == 'DNxHR':
+            return 'dnxhr'
+        if pretty_name == 'Motion JPEG':
+            return 'mjpeg'
+        return 'Not a codec'
 
     def doIt(selfself, args):
         print("Tinyblasting...")
@@ -158,6 +197,54 @@ class Tinyblast(ompx.MPxCommand):
     @staticmethod
     def cmdCreator():
         return ompx.asMPxPtr(Tinyblast())
+
+    def custom_playblast(self, *args, **kwargs):
+        print("Running tinyblast...")
+
+        kwargs['format'] = 'avi'
+        kwargs['percent'] = int(self.percent)
+        kwargs['quality'] = 100
+        kwargs['widthHeight'] = self.resolution
+
+        result = original_playblast(*args, **kwargs)
+        print(f"{result}")
+
+        if result:
+            self.blastIt(result)
+
+    def blastIt(self, input_path):
+        try:
+            ffmpeg_path = os.path.join(get_plugin_directory(), 'ffmpeg.exe')
+            print(f"ffmpeg path: {ffmpeg_path}")
+            if not os.path.exists(ffmpeg_path):
+                raise FileNotFoundError(f"FFmpeg binary not found at {ffmpeg_path}")
+
+            input_file = input_path  # The file output by playblast
+            #output_directory = os.path.dirname(result)  # Get the directory path
+            output_directory = os.path.dirname(cmds.file(query=True, sceneName=True))
+            input_filename = os.path.basename(input_path)  # Get the filename with extension
+
+            # Change the extension to .mp4
+            output_filename = os.path.splitext(input_filename)[0] + ".mp4"
+
+            # Define the full path for the converted output file
+            output_file = self.path
+            print(f"Output path: {output_file}")
+
+            # Run FFmpeg conversion
+            subprocess.run([ffmpeg_path,
+                            '-i', input_file,
+                            '-vcodec',  self.codec,
+                            '-pix_fmt', self.pixel_format,
+                            '-strict', 'experimental',
+                            '-b:v', self.bitrate,
+                            output_file,
+                            '-y'], check=True, shell=True)
+            print(f"Video conversion to {output_file} successful!")
+            # os.remove(input_file) # Running into permission issues trying to delete from AppData
+            # print(f"Original playblast deleted: {input_file}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error during FFmpeg conversion: {e}")
 
 def get_maya_window():
     import maya.OpenMayaUI as omui
@@ -228,9 +315,10 @@ class TinyblastOptionsWindow(QMainWindow):
         # MOV
         if index == 2:
             self.ui.encodingComboBox.addItems([
-                QCoreApplication.translate("TinyblastOptions", u"Apple ProRes", None),
                 QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
                 QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"DNxHD", None),
+                QCoreApplication.translate("TinyblastOptions", u"DNxHR", None),
                 QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None)
             ])
 
@@ -242,8 +330,6 @@ class TinyblastOptionsWindow(QMainWindow):
             self.ui.encodingComboBox.addItems([
                 QCoreApplication.translate("TinyblastOptions", u"H.264", None),
                 QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None),
-                QCoreApplication.translate("TinyblastOptions", u"DivX", None),
-                QCoreApplication.translate("TinyblastOptions", u"Xvid", None),
                 QCoreApplication.translate("TinyblastOptions", u"Motion JPEG", None),
             ])
 
@@ -264,10 +350,20 @@ class TinyblastOptionsWindow(QMainWindow):
 
     def tinyblast(self):
         print("Tinyblasting...")
-        cmds.playblast()
+        self.apply_settings()
+        tinyblast_instance.custom_playblast()
 
     def apply_settings(self):
-        print("TODO")
+        # Directly call the `apply_settings` method of the Tinyblast instance
+        if tinyblast_instance is not None:
+            tinyblast_instance.apply_settings(
+                self.ui.formattingComboBox.currentText(),  # Use the selected format
+                self.ui.encodingComboBox.currentText(),  # Use the selected codec
+                self.ui.qualitySpinBox.value(),  # Quality as a percentage
+                (self.ui.widthSpinBox.value(), self.ui.heightSpinBox.value()),  # Resolution
+                self.ui.scaleSpinBox.value(),  # Scale
+                self.ui.filePathTextBox.text()  # File path
+            )
 
     def quit_window(self):
         tb_window.close()
@@ -342,13 +438,15 @@ def cmdCreator():
     return ompx.asMPxPtr(MyPluginCommand())
 
 def initializePlugin(mobject):
+    global tinyblast_instance
+    tinyblast_instance = Tinyblast()
     try:
         mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "1.0.0", "Any")
         mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
         mplugin.registerCommand("myPluginCommand", cmdCreator)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
         setup_script_job()
-        cmds.playblast = custom_playblast
+        cmds.playblast = tinyblast_instance.custom_playblast
     except Exception as e:
         om.MGlobal.displayError(f"Failed to initialize plugin: {str(e)}")
         raise
