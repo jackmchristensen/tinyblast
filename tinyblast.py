@@ -39,15 +39,17 @@ class Tinyblast(ompx.MPxCommand):
         self.resolution = (1920, 1080)
         # self.resolution = (cmds.getAttr("defaultResolution.width"), cmds.getAttr("defaultResolution.height"))
         self.percent = '100'
+        self.padding = 4
         self.path = ''
         self.save = True
 
-    def apply_settings(self, format, codec, quality, resolution, scale, file_path, save):
+    def apply_settings(self, format, codec, quality, resolution, scale, file_path, padding, save):
         self.format = format
         self.codec = self.get_codec(codec)
         self.bitrate = f"{round(8 * (resolution[0] * resolution[1]) / (1920 * 1080) * (float(quality) / 100), 1)}M"
         self.resolution = resolution
         self.percent = int(scale * 100)
+        self.padding = int(padding)
         self.path = file_path
         self.save = save
 
@@ -165,13 +167,120 @@ class TinyblastOptionsWindow(QMainWindow):
         self.ui.saveToFileCheckBox.toggled.connect(self.save_to_file_toggle)
         self.ui.browseButton.clicked.connect(self.browse_files)
 
+    def get_codecs_from_format(self, index):
+        if index == 0:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"AV1", None),
+                QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP9", None)
+            ])
+        # MKV
+        if index == 1:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"AV1", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP9", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP8", None),
+                QCoreApplication.translate("TinyblastOptions", u"Theora", None)
+            ])
+        # MOV
+        if index == 2:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"HEVC (H.265)", None),
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"DNxHD", None),
+                QCoreApplication.translate("TinyblastOptions", u"DNxHR", None),
+                QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None)
+            ])
+        # AVI
+        if index == 3:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"H.264", None),
+                QCoreApplication.translate("TinyblastOptions", u"MPEG-4", None),
+                QCoreApplication.translate("TinyblastOptions", u"Motion JPEG", None),
+            ])
+        # WEBM
+        if index == 4:
+            self.ui.encodingComboBox.addItems([
+                QCoreApplication.translate("TinyblastOptions", u"AV1", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP9", None),
+                QCoreApplication.translate("TinyblastOptions", u"VP8", None)
+            ])
+
+    # Restore applied settings
     def restore_settings(self):
         settings = QSettings("Jack Christensen", "Tinyblast")
 
+        # Window size
         geometry = settings.value("windowGeometry")
         if geometry:
             self.restoreGeometry(geometry)
 
+        # Format dropdown menu
+        formatIndex = settings.value("formatIndex", 0)
+        self.ui.formattingComboBox.setCurrentIndex(int(formatIndex))
+        self.update_format(int(formatIndex))
+        #self.get_codecs_from_format(int(formatIndex))
+
+        # Codec dropdown menu
+        codecIndex = settings.value("codecIndex", 0)
+        self.ui.encodingComboBox.setCurrentIndex(int(codecIndex))
+
+        # Quality value
+        qualityValue = settings.value("qualityValue", 0)
+        self.ui.qualitySpinBox.setValue(int(qualityValue))
+        self.ui.qualitySlider.setValue(int(qualityValue))
+
+        # Display size dropdown menu
+        displaySizeIndex = settings.value("displaySizeIndex", 0)
+        self.ui.displaySizeComboBox.setCurrentIndex(int(displaySizeIndex))
+
+        # Resolution values
+        resolutionValues = settings.value("resolution", [1920, 1080])
+        if isinstance(resolutionValues, list) and len(resolutionValues) == 2:
+            self.ui.widthSpinBox.setValue(int(resolutionValues[0]))
+            self.ui.heightSpinBox.setValue(int(resolutionValues[1]))
+
+        # Scale value
+        scaleValue = settings.value("scaleValue", 0.0)
+        self.ui.scaleSpinBox.setValue(float(scaleValue))
+        self.ui.scaleSlider.setValue(int(float(scaleValue) * 1000.0))
+
+        # Frame padding
+        framePaddingValue = settings.value("framePaddingValue", 0)
+        self.ui.framePaddingSpinBox.setValue(int(framePaddingValue))
+        self.ui.framePaddingSlider.setValue(int(framePaddingValue))
+
+        # Save to file checkbox
+        saveToFile = settings.value("saveToFileCheck", False)
+        if saveToFile == 'true':
+            self.ui.saveToFileCheckBox.setChecked(True)
+            self.ui.filePathTextBox.setEnabled(True)
+            self.ui.browseButton.setEnabled(True)
+        else:
+            self.ui.saveToFileCheckBox.setChecked(False)
+            self.ui.filePathTextBox.setEnabled(False)
+            self.ui.browseButton.setEnabled(False)
+
+        # Save path
+        savePath = settings.value("savePath", 0)
+        self.ui.filePathTextBox.setText(str(savePath))
+
+    # settings = QSettings("Jack Christensen", "Tinyblast")
+    # settings.setValue("formatIndex", self.ui.formattingComboBox.currentIndex())
+    # settings.setValue("codecIndex", self.ui.encodingComboBox.currentIndex())
+    # settings.setValue("qualityValue", self.ui.qualitySpinBox.value())
+    # settings.setValue("displaySizeIndex", self.ui.displaySizeComboBox.currentIndex())
+    # settings.setValue("resolution", (self.ui.widthSpinBox.value(), self.ui.heightSpinBox.value()))
+    # settings.setValue("scaleValue", self.ui.scaleSpinBox.value())
+    # settings.setValue("framePaddingValue", self.ui.framePaddingSpinBox.value())
+    # settings.setValue("saveToFileCheck", self.ui.saveToFileCheckBox.isChecked())
+    # settings.setValue("savePath", self.ui.filePathTextBox.text())
+
+    # Save settings on close
     def closeEvent(self, event):
         settings = QSettings("Jack Christensen", "Tinyblast")
         settings.setValue("windowGeometry", self.saveGeometry())
@@ -257,8 +366,19 @@ class TinyblastOptionsWindow(QMainWindow):
                 (self.ui.widthSpinBox.value(), self.ui.heightSpinBox.value()),  # Resolution
                 self.ui.scaleSpinBox.value(),  # Scale
                 self.ui.filePathTextBox.text(),  # File path
+                self.ui.framePaddingSpinBox.value(),
                 self.ui.saveToFileCheckBox.isChecked()
             )
+        settings = QSettings("Jack Christensen", "Tinyblast")
+        settings.setValue("formatIndex", self.ui.formattingComboBox.currentIndex())
+        settings.setValue("codecIndex", self.ui.encodingComboBox.currentIndex())
+        settings.setValue("qualityValue", self.ui.qualitySpinBox.value())
+        settings.setValue("displaySizeIndex", self.ui.displaySizeComboBox.currentIndex())
+        settings.setValue("resolution", (self.ui.widthSpinBox.value(), self.ui.heightSpinBox.value()))
+        settings.setValue("scaleValue", self.ui.scaleSpinBox.value())
+        settings.setValue("framePaddingValue", self.ui.framePaddingSpinBox.value())
+        settings.setValue("saveToFileCheck", self.ui.saveToFileCheckBox.isChecked())
+        settings.setValue("savePath", self.ui.filePathTextBox.text())
 
     def quit_window(self):
         tb_window.close()
