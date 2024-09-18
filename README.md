@@ -1,5 +1,9 @@
 # Tinyblast v1.0.0
 
+## **Important**
+
+FFmpeg is no longer bundled with Tinyblast directly in the source. In order to download the plugin with FFmpeg please go to the release page on this repo and download tinyblast_v1.0.0.zip or download it [here](https://drive.proton.me/urls/JVV34W2H3R#VOJzkesz0Cgq). If you only download the source, the plugin **will not work**.
+
 ## Overview
 
 Tinyblast is a lightweight plugin designed to enhance Maya’s playblast workflow by converting uncompressed `.avi` files to compressed `.mp4` files using the efficient H.264 codec. It adds a custom button to Maya's Playblast Options window, enabling users to save playblasts in the more storage-friendly `.mp4` format, significantly reducing file sizes without sacrificing quality.
