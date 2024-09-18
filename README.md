@@ -30,7 +30,3 @@ Tinyblast is a lightweight plugin designed to enhance Maya’s playblast workflo
 This project is licensed under the GPLv3 license.
 
 It also includes FFmpeg, which is licensed under GPLv3. You can download the FFmpeg source code from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html).
-
-## FFmpeg Usage and Legal Compliance
-
-Tinyblast uses the FFmpeg library to handle the conversion of `.avi` files to `.mp4`. FFmpeg is licensed under the GPLv3 license, and its source code is available for download at [FFmpeg Source](https://ffmpeg.org/download.html).
