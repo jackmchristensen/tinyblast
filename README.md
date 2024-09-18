@@ -2,7 +2,7 @@
 
 ## **Important**
 
-FFmpeg is no longer bundled with Tinyblast directly in the source. In order to download the plugin with FFmpeg please go to the release page on this repo and download tinyblast_v1.0.0.zip or download it [here](https://drive.proton.me/urls/JVV34W2H3R#VOJzkesz0Cgq). If you only download the source, the plugin **will not work**.
+FFmpeg is no longer bundled with Tinyblast directly in the source. In order to download the plugin with FFmpeg please go to the [release page on this repo](https://git.jackmchristensen.com/jack/tinyblast/-/releases/v1.0.0) and download tinyblast_v1.0.0.zip or download it [here](https://drive.proton.me/urls/JVV34W2H3R#VOJzkesz0Cgq). If you only download the source, the plugin **will not work**.
 
 ## Overview
 
