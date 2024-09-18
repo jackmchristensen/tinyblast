@@ -32,7 +32,7 @@ Currently, there is no menu button to open Tinyblast. You will need to run the f
 
 ```python
 import maya.cmds as cmds
-cmds.tinyblastOptions()
+cmds.openTinyblastOptions()
 ```
 
 ## Future Plans
