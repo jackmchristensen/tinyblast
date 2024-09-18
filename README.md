@@ -28,12 +28,7 @@ Tinyblast is a custom playblast tool for Maya, designed to offer more flexible c
 3. Access the Playblast Options window in Maya.
 
 ## How to Use
-Currently, there is no menu button to open Tinyblast. You will need to run the following command in Maya's script editor:
-
-```python
-import maya.cmds as cmds
-cmds.openTinyblastOptions()
-```
+The plugin creates a custom shelf called Tinyblast in Maya with a button that opens the Tinyblast Options window where you can choose settings and create a playblast. Use Tinyblast as you would the regular Maya playblast.
 
 ## Future Plans
 - Further improvements to format and codec compatibility.

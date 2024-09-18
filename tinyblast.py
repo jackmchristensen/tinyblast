@@ -448,6 +448,23 @@ class OpenTinyblastOptions(ompx.MPxCommand):
 def cmdCreator():
     return ompx.asMPxPtr(OpenTinyblastOptions())
 
+def create_custom_shelf():
+    # Check if the shelf already exists
+    shelf_name = "Tinyblast"
+    if cmds.shelfLayout(shelf_name, exists=True):
+        cmds.deleteUI(shelf_name)  # Delete the existing shelf (if you want to reset it)
+
+    # Create a new shelf
+    cmds.shelfLayout(shelf_name, parent="ShelfLayout")
+
+    # Add a button to the shelf (this will call your UI function)
+    cmds.shelfButton(
+        label="Tinyblast",
+        annotation="Open Tinyblast UI",  # Tooltip text
+        image="pythonFamily.png",  # You can replace this with any icon you want
+        command="cmds.openTinyblastOptions()"  # Command to open your UI
+    )
+
 def initializePlugin(mobject):
     global tinyblast_instance
     tinyblast_instance = Tinyblast()
@@ -460,6 +477,7 @@ def initializePlugin(mobject):
     except Exception as e:
         om.MGlobal.displayError(f"Failed to initialize plugin: {str(e)}")
         raise
+    create_custom_shelf()
 
 def uninitializePlugin(mobject):
     try:
