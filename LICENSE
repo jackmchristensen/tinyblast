@@ -672,3 +672,17 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+---------------------------------------
+
+Third-Party Licenses
+
+This project includes or relies on the following third-party libraries, which are licensed separately:
+
+- FFmpeg: This project uses code from FFmpeg, licensed under the GPLv3 (https://ffmpeg.org/legal.html). FFmpeg’s source code is available at https://ffmpeg.org/download.html.
+- Qt6: This project uses Qt, which is licensed under the LGPLv3 (https://www.qt.io/licensing).
+- PySide6: The Python bindings for Qt, PySide6, are licensed under the LGPLv3 (https://doc.qt.io/qtforpython/licenses.html).
+- Shiboken6: Shiboken, used to create Python bindings, is licensed under the LGPLv3 (https://doc.qt.io/qtforpython/shiboken6/).
+
+For more details, see the respective licenses included with these libraries.
+
