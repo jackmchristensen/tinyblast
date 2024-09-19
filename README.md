@@ -33,8 +33,13 @@ Tinyblast is a lightweight plugin designed to enhance Maya’s playblast workflo
 
 This project is licensed under the GPLv3 license.
 
-It also includes FFmpeg, which is licensed under GPLv3. You can download the FFmpeg source code from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html).
+## Acknowledgments
 
-## FFmpeg Usage and Legal Compliance
+This project uses the following third-party libraries:
 
-Tinyblast uses the FFmpeg library to handle the conversion of `.avi` files to `.mp4`. FFmpeg is licensed under the GPLv3 license, and its source code is available for download at [FFmpeg Source](https://ffmpeg.org/download.html).
+- **FFmpeg**: Licensed under the [GNU General Public License (GPL)](https://ffmpeg.org/legal.html). FFmpeg is a powerful multimedia framework used in this project for video conversion.
+- **Qt6**: Licensed under the [GNU Lesser General Public License (LGPL) v3](https://www.qt.io/licensing). Qt is used for building the user interface of this project.
+- **PySide6**: Licensed under the [GNU Lesser General Public License (LGPL) v3](https://doc.qt.io/qtforpython/licenses.html). PySide6 provides Python bindings for the Qt framework.
+- **Shiboken6**: Licensed under the [GNU Lesser General Public License (LGPL) v3](https://doc.qt.io/qtforpython/shiboken6/). Shiboken6 is used for generating Python bindings for Qt.
+
+Please refer to the respective licenses for each library for more information.
