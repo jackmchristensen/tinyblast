@@ -5,10 +5,6 @@ import os
 import subprocess
 import sys
 
-# Global variable to store the scriptJob ID
-playblast_job_id = None
-original_playblast = cmds.playblast
-
 def get_plugin_directory():
     # Get the path of the currently loaded plugin
     plugin_name = "tinyblast"
@@ -23,7 +19,7 @@ def custom_playblast(*args, **kwargs):
     kwargs['quality'] = 100
     kwargs['widthHeight'] = (1920, 1080)
 
-    result = original_playblast(*args, **kwargs)
+    result = cmds.playblast(*args, **kwargs)
     print(f"{result}")
 
     if result:
@@ -107,10 +103,8 @@ def add_custom_button_to_playblast():
     else:
         print("Playblast Options window not found.")
 
-
 def custom_button_action(*args):
-    cmds.playblast()
-
+    custom_playblast()
 
 def get_playblast_options_window():
     # Check if the Playblast Options window is open
@@ -120,9 +114,7 @@ def get_playblast_options_window():
             return window
     return None
 
-def setup_script_job():
-    global playblast_job_id
-
+def setup_script_job(playblast_job_id):
     # Kill any previously running scriptJob
     if playblast_job_id is not None and cmds.scriptJob(exists=playblast_job_id):
         cmds.scriptJob(kill=playblast_job_id, force=True)
@@ -143,19 +135,18 @@ class Tinyblast(ompx.MPxCommand):
 
     def doIt(selfself, args):
         print("Executing custom playblast command.")
-        cmds.playblast()
+        custom_playblast()
 
-    @staticmethod
-    def cmdCreator():
-        return ompx.asMPxPtr(Tinyblast())
+def tinyblastCmd():
+   return ompx.asMPxPtr(Tinyblast())
 
 def initializePlugin(mobject):
     try:
-        mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "1.0.0", "Any")
-        mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
+        mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "1.0.1", "Any")
+        mplugin.registerCommand("tinyblast", tinyblastCmd)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
-        setup_script_job()
-        cmds.playblast = custom_playblast
+        playblast_job_id = None
+        setup_script_job(playblast_job_id)
     except Exception as e:
         om.MGlobal.displayError(f"Failed to initialize plugin: {str(e)}")
         raise

@@ -1,8 +1,12 @@
-# Tinyblast v1.0.0
+# Tinyblast v1.0.1
 
 # **Important!**
 
 FFmpeg is no longer bundled with Tinyblast directly in the source. In order to download the plugin with FFmpeg please go to the [release page on this repo](https://git.jackmchristensen.com/jack/tinyblast/-/releases/v1.0.0) and download tinyblast_v1.0.0.zip or download it [here](https://drive.proton.me/urls/JVV34W2H3R#VOJzkesz0Cgq). If you only download the source, the plugin **will not work**.
+
+## Version 1.0.1 Hotfix
+
+There was an issue in v1.0.0 that would cause Maya to hang on 'Loading plugins (lookdevXmaya)' when booting. Removing Tinyblast from the plug-ins directory temporarily would fix it for a time, but it would inevitably happen again. v1.0.1 aims to remove the issue entirely. If the issue still arises please contact me and let me know and I'll keep working on it.
 
 ## Overview
 
