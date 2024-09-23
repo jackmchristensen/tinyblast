@@ -15,9 +15,6 @@ from PySide6.QtWidgets import QMainWindow, QFileDialog
 from PySide6.QtCore import QCoreApplication, QSettings
 import shiboken6
 
-# Global variable to store the scriptJob ID
-playblast_job_id = None
-original_playblast = cmds.playblast
 tinyblast_instance = None
 
 def get_plugin_directory():
@@ -27,7 +24,7 @@ def get_plugin_directory():
     return os.path.dirname(plugin_path)
 
 def custom_button_action(*args):
-    cmds.playblast()
+    tinyblast_instance.custom_playblast()
 
 class Tinyblast(ompx.MPxCommand):
     def __init__(self):
@@ -78,7 +75,7 @@ class Tinyblast(ompx.MPxCommand):
 
     def doIt(selfself, args):
         print("Tinyblasting...")
-        cmds.playblast()
+        tinyblast_instance.tinyblast()
 
     @staticmethod
     def cmdCreator():
@@ -90,7 +87,7 @@ class Tinyblast(ompx.MPxCommand):
         kwargs['quality'] = 100
         kwargs['widthHeight'] = self.resolution
 
-        result = original_playblast(*args, **kwargs)
+        result = cmds.playblast(*args, **kwargs)
 
         if result and self.save:
             self.blastIt(result)
@@ -473,7 +470,7 @@ def initializePlugin(mobject):
         mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
         mplugin.registerCommand("openTinyblastOptions", cmdCreator)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
-        cmds.playblast = tinyblast_instance.custom_playblast
+        #cmds.playblast = tinyblast_instance.custom_playblast
     except Exception as e:
         om.MGlobal.displayError(f"Failed to initialize plugin: {str(e)}")
         raise
