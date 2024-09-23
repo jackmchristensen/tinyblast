@@ -470,7 +470,6 @@ def initializePlugin(mobject):
         mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
         mplugin.registerCommand("openTinyblastOptions", cmdCreator)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
-        #cmds.playblast = tinyblast_instance.custom_playblast
     except Exception as e:
         om.MGlobal.displayError(f"Failed to initialize plugin: {str(e)}")
         raise
