@@ -466,7 +466,7 @@ def initializePlugin(mobject):
     global tinyblast_instance
     tinyblast_instance = Tinyblast()
     try:
-        mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "2.0.0", "Any")
+        mplugin = ompx.MFnPlugin(mobject, "Jack Christensen", "2.0.0-beta", "Any")
         mplugin.registerCommand("tinyblast", Tinyblast.cmdCreator)
         mplugin.registerCommand("openTinyblastOptions", cmdCreator)
         om.MGlobal.displayInfo("Tinyblast plugin loaded.")
